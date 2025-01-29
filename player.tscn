@@ -1,0 +1,103 @@
+[gd_scene load_steps=10 format=3 uid="uid://c4rbtfvtdwcn0"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_637v7"]
+[ext_resource type="PackedScene" uid="uid://pbmyh1qru7p" path="res://characters/happy_boo/happy_boo.tscn" id="1_g5sb6"]
+[ext_resource type="PackedScene" uid="uid://bkhnc6q4snran" path="res://gun.tscn" id="3_w4p8w"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8srmt"]
+radius = 34.0588
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_52u8y"]
+radius = 43.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_afix5"]
+bg_color = Color(0.572669, 1.1792e-06, 3.36915e-07, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mqq8v"]
+bg_color = Color(0, 1, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hlhyq"]
+bg_color = Color(0.0166921, 0, 0.222933, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bdok"]
+bg_color = Color(0, 0.672071, 0.779423, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_637v7")
+
+[node name="HappyBoo" parent="." instance=ExtResource("1_g5sb6")]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_8srmt")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+scale = Vector2(18.04, 18.72)
+zoom = Vector2(0.5, 0.5)
+
+[node name="Gun" parent="." instance=ExtResource("3_w4p8w")]
+position = Vector2(0, -34)
+
+[node name="HurtBox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("CircleShape2D_52u8y")
+debug_color = Color(0.870732, 0.312835, 0.415004, 0.42)
+
+[node name="Health" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+offset_left = -112.0
+offset_top = -149.0
+offset_right = 113.0
+offset_bottom = -120.0
+theme_override_styles/background = SubResource("StyleBoxFlat_afix5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mqq8v")
+value = 100.0
+show_percentage = false
+
+[node name="Experience" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+offset_left = -1786.0
+offset_top = -1049.0
+offset_right = -942.0
+offset_bottom = -939.0
+theme_override_styles/background = SubResource("StyleBoxFlat_hlhyq")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3bdok")
+step = 0.0
+show_percentage = false
+
+[node name="Level" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = -1899.0
+offset_top = -1048.0
+offset_right = -1797.0
+offset_bottom = -949.0
+theme_override_font_sizes/font_size = 72
+text = "0"
+horizontal_alignment = 1
+
+[node name="Regen" type="Timer" parent="."]
+unique_name_in_owner = true
+autostart = true
+
+[connection signal="level_up" from="." to="Gun" method="_on_player_level_up"]
+[connection signal="timeout" from="Regen" to="." method="_on_regen_timeout"]

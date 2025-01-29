@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://cn4b2m5ssuee5"]
+
+[ext_resource type="PackedScene" uid="uid://c4rbtfvtdwcn0" path="res://player.tscn" id="1_0itab"]
+[ext_resource type="Script" path="res://vampire_survivors.gd" id="1_vypaa"]
+
+[sub_resource type="Curve2D" id="Curve2D_vfv7p"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -258, -264, 0, 0, 0, 0, 2149, -261, 0, 0, 0, 0, 2140, 1268, 0, 0, 0, 0, -252, 1271, 0, 0, 0, 0, -258, -264)
+}
+point_count = 5
+
+[node name="Game" type="Node2D" groups=["mobs"]]
+y_sort_enabled = true
+script = ExtResource("1_vypaa")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+offset_left = -1957.0
+offset_top = -1116.0
+offset_right = 1974.0
+offset_bottom = 1106.0
+color = Color(0.156863, 0.470588, 0.141176, 1)
+
+[node name="Player" parent="." instance=ExtResource("1_0itab")]
+
+[node name="Path2D" type="Path2D" parent="Player"]
+position = Vector2(-1639.02, -824.522)
+scale = Vector2(1.80224, 1.69121)
+curve = SubResource("Curve2D_vfv7p")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Player/Path2D"]
+unique_name_in_owner = true
+position = Vector2(-258, -264)
+rotation = 0.00124636
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="GameOver" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -16.0
+offset_right = 53.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.627451)
+
+[node name="Label" type="Label" parent="GameOver/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -11.5
+offset_right = 43.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 128
+text = "Game Over"
+
+[connection signal="health_depleted" from="Player" to="." method="_on_player_health_depleted"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
